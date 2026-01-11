@@ -15,6 +15,7 @@ association [1..*] to /DMO/I_SupplementText as _SupplementText on $projection.Bo
     @Semantics.amount.currencyCode: 'CurrencyCode'
     price as Price,
     currency_code as CurrencyCode,
+    @Semantics.systemDateTime.localInstanceLastChangedAt: true
     last_changed_at as LastChangedAt,
     //      Annotations-->
     _Booking,

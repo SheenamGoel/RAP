@@ -6,12 +6,13 @@ implementation in class zcl_bp_travel_860_m unique
 persistent table z860_travel_m
 lock master
 authorization master ( instance )
-//etag master <field_name>
+etag master LastChangedAt
+early numbering
 {
   create ( authorization : global );
   update;
   delete;
-//  field ( readonly ) TravelId;
+  field ( readonly ) TravelId;
   association _Booking { create; }
   mapping for z860_travel_m
     {
@@ -37,7 +38,8 @@ implementation in class zcl_bp_booking_860_m unique
 persistent table z860_booking_m
 lock dependent by _Travel
 authorization dependent by _Travel
-//etag master <field_name>
+etag master LastChangedAt
+early numbering
 {
   update;
   delete;
@@ -65,11 +67,12 @@ implementation in class zcl_bp_booksup_860_m unique
 persistent table z860_booksup_m
 lock dependent by _Travel
 authorization dependent by _Travel
-//etag master <field_name>
+etag master LastChangedAt
+early numbering
 {
   update;
   delete;
-  field ( readonly ) TravelId, BookingId, BookingSupplementId;
+  field ( readonly ) TravelId, BookingId , BookingSupplementId;
   association _Travel;
   association _Booking;
   mapping for z860_booksup_m

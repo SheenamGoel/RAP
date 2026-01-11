@@ -21,6 +21,7 @@ association [1..1] to /DMO/I_Booking_Status_VH as _BookingStatus on $projection.
     flight_price as FlightPrice,
     currency_code as CurrencyCode,
     booking_status as BookingStatus,
+    @Semantics.systemDateTime.localInstanceLastChangedAt: true
     last_changed_at as LastChangedAt,
     //      Annotations-->
     _Travel,
