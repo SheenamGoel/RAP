@@ -12,6 +12,12 @@ early numbering
   create ( authorization : global );
   update;
   delete;
+  action AcceptTravel result[1] $self;
+  action RejectTravel result[1] $self;
+
+  factory action copyTravel [1];
+  internal action recalTotalPrice;
+
   field ( readonly ) TravelId;
   association _Booking { create; }
   mapping for z860_travel_m
