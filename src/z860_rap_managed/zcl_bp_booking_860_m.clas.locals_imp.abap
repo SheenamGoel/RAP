@@ -4,6 +4,10 @@ CLASS lhc_zi_booking_860_m DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
     METHODS earlynumbering_cba_Bookingsupp FOR NUMBERING
       IMPORTING entities FOR CREATE ZI_Booking_860_M\_Bookingsupplement.
+    METHODS get_instance_features FOR INSTANCE FEATURES
+      IMPORTING keys REQUEST requested_features FOR ZI_Booking_860_M RESULT result.
+    METHODS totalprice FOR DETERMINE ON MODIFY
+      IMPORTING keys FOR zi_booking_860_m~totalprice.
 
 ENDCLASS.
 
@@ -47,6 +51,35 @@ CLASS lhc_zi_booking_860_m IMPLEMENTATION.
       ENDLOOP.
     ENDLOOP.
 
+
+  ENDMETHOD.
+
+  METHOD get_instance_features.
+
+    READ ENTITIES OF zi_travel_860_m IN LOCAL MODE
+    ENTITY zi_travel_860_m BY \_Booking
+    FIELDS ( TravelId BookingId BookingStatus )
+    WITH CORRESPONDING #( keys )
+    RESULT DATA(lt_result).
+
+    result = VALUE #( FOR ls_result IN lt_result
+                        ( %tky = ls_result-%tky
+                          %features-%assoc-_BookingSupplement = COND #( WHEN ls_result-BookingStatus = 'X'
+                                                                   THEN if_abap_behv=>fc-o-disabled
+                                                                   ELSE if_abap_behv=>fc-o-enabled )
+                        )
+                     ).
+  ENDMETHOD.
+
+  METHOD totalPrice.
+
+    DATA: it_data TYPE STANDARD TABLE OF zi_travel_860_m WITH UNIQUE HASHED KEY key COMPONENTS TravelId.
+
+    it_data = CORRESPONDING #( keys DISCARDING DUPLICATES MAPPING TravelId = TravelId ).
+    MODIFY ENTITIES OF zi_travel_860_m IN LOCAL MODE
+    ENTITY zi_travel_860_m
+    EXECUTE recalTotalPrice
+    FROM CORRESPONDING #( it_data ).
 
   ENDMETHOD.
 

@@ -1,9 +1,10 @@
-managed;
+managed implementation in class zcl_bp_travel_860_m unique;
 strict ( 2 );
 
 define behavior for ZI_TRAVEL_860_M //alias <alias_name>
 implementation in class zcl_bp_travel_860_m unique
 persistent table z860_travel_m
+with additional save
 lock master
 authorization master ( instance )
 etag master LastChangedAt
@@ -12,14 +13,18 @@ early numbering
   create ( authorization : global );
   update;
   delete;
-  action AcceptTravel result[1] $self;
-  action RejectTravel result[1] $self;
+  action ( features : instance ) AcceptTravel result [1] $self;
+  action ( features : instance ) RejectTravel result [1] $self;
 
   factory action copyTravel [1];
   internal action recalTotalPrice;
+  determination totalPrice on modify { create; field BookingFee, CurrencyCode; }
+  validation validateCustomerId on save { create; field CustomerId; }
+  validation validateDates on save { create; field BeginDate, EndDate; }
 
-  field ( readonly ) TravelId;
-  association _Booking { create; }
+  field ( readonly ) TravelId, CreatedAt, CreatedBy, LastChangedAt, LastChangedBy;
+  field ( mandatory ) AgencyId, CustomerId, BeginDate, EndDate, OverallStatus, BookingFee, CurrencyCode;
+  association _Booking { create ( features : instance ); }
   mapping for z860_travel_m
     {
       TravelId      = travel_id;
@@ -49,9 +54,12 @@ early numbering
 {
   update;
   delete;
-  field ( readonly ) TravelId, BookingId;
+  field ( readonly ) TravelId, BookingId, LastChangedAt;
+  field ( mandatory ) CarrierId, ConnectionId, FlightDate, BookingStatus;
+  field ( mandatory : create, readonly : update ) BookingDate, CustomerId;
+  determination totalPrice on modify { create; field FlightPrice, CurrencyCode; }
   association _Travel;
-  association _BookingSupplement { create; }
+  association _BookingSupplement { create ( features : instance ); }
   mapping for z860_booking_m
     {
       TravelId      = travel_id;
@@ -70,7 +78,8 @@ early numbering
 
 define behavior for ZI_BOOKSUP_860_M //alias <alias_name>
 implementation in class zcl_bp_booksup_860_m unique
-persistent table z860_booksup_m
+//persistent table z860_booksup_m
+with unmanaged save with full data
 lock dependent by _Travel
 authorization dependent by _Travel
 etag master LastChangedAt
@@ -78,7 +87,9 @@ early numbering
 {
   update;
   delete;
-  field ( readonly ) TravelId, BookingId , BookingSupplementId;
+  field ( readonly ) TravelId, BookingId, BookingSupplementId, LastChangedAt;
+  field ( mandatory ) Price, SupplementId;
+  determination totalPrice on modify { create; field Price, CurrencyCode; }
   association _Travel;
   association _Booking;
   mapping for z860_booksup_m
