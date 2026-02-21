@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_860_modify_practice IMPLEMENTATION.
+CLASS ZCL_860_MODIFY_PRACTICE IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
     DATA lt_booking TYPE TABLE FOR CREATE zi_travel_860_m\_Booking.
@@ -51,7 +53,4 @@ CLASS zcl_860_modify_practice IMPLEMENTATION.
     COMMIT ENTITIES.
 
   ENDMETHOD.
-
-
-
 ENDCLASS.

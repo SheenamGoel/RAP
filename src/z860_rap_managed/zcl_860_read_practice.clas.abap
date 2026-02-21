@@ -12,7 +12,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_860_read_practice IMPLEMENTATION.
+CLASS ZCL_860_READ_PRACTICE IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 ********************************  Short form read  ********************************************************
 *    READ ENTITY zi_travel_860_m FROM VALUE #( ( %key-TravelId = '00004110'
@@ -110,5 +112,4 @@ CLASS zcl_860_read_practice IMPLEMENTATION.
     ENDIF.
 
   ENDMETHOD.
-
 ENDCLASS.

@@ -12,7 +12,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_860_data_generator IMPLEMENTATION.
+CLASS ZCL_860_DATA_GENERATOR IMPLEMENTATION.
+
+
 METHOD if_oo_adt_classrun~main.
 
 
