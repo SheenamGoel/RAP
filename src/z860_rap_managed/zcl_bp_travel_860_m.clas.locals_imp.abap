@@ -300,7 +300,6 @@ CLASS lhc_ZI_TRAVEL_860_M IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD AcceptTravel.
-
     MODIFY ENTITIES OF zi_travel_860_m IN LOCAL MODE
     ENTITY zi_travel_860_m
     UPDATE FIELDS ( OverallStatus ) WITH VALUE #( FOR ls_keys IN keys ( %tky = ls_keys-%tky
